@@ -705,40 +705,6 @@ function startGPS(){
 }
 
 
-// ── SIMULATION ───────────────────────────────────────────────────
-const SIM=[
-  [3.700168,-76.442862],[3.700149,-76.442737],[3.700185,-76.442939],
-  [3.700202,-76.442987],[3.700248,-76.443133],[3.700230,-76.443175],
-  [3.700380,-76.443143],[3.700511,-76.443099],[3.700536,-76.443006],
-  [3.700566,-76.442908],[3.700504,-76.442822],[3.700416,-76.442792],
-  [3.700474,-76.442701],[3.700543,-76.442562],[3.700641,-76.442520],
-  [3.700692,-76.442522],[3.700688,-76.442620],[3.700735,-76.442771],
-  [3.700738,-76.442819],[3.700810,-76.442902],[3.700889,-76.443035],
-  [3.700964,-76.443230]
-];
-
-function toggleSim(){
-  if(simRun){
-    clearInterval(simInt); simRun=false; simIdx=0;
-    return;
-  }
-  visited.clear(); cur=0; simRun=true; simIdx=0;
-  renderStrip(); updateProg(); updateInfo(); redraw();
-  simInt=setInterval(()=>{
-    if(simIdx>=SIM.length){
-      clearInterval(simInt); simRun=false;
-      return;
-    }
-    const [lat,lon]=SIM[simIdx++];
-    userLat=lat; userLon=lon;
-    const simSVG=`<div style="width:36px;height:36px;"><svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="18" fill="rgba(255,255,255,0.9)"/><circle cx="18" cy="18" r="16" fill="#4285F4" opacity="0.2"/><polygon points="18,2 12,14 24,14" fill="#4285F4" opacity="0.5"/><circle cx="18" cy="11" r="3.5" fill="#1a237e"/><line x1="18" y1="14.5" x2="18" y2="24" stroke="#1a237e" stroke-width="3" stroke-linecap="round"/><line x1="18" y1="17" x2="13" y2="21" stroke="#1a237e" stroke-width="2.5" stroke-linecap="round"/><line x1="18" y1="17" x2="23" y2="21" stroke="#1a237e" stroke-width="2.5" stroke-linecap="round"/><line x1="18" y1="24" x2="14" y2="30" stroke="#1a237e" stroke-width="2.5" stroke-linecap="round"/><line x1="18" y1="24" x2="22" y2="30" stroke="#1a237e" stroke-width="2.5" stroke-linecap="round"/></svg></div>`;
-    const walkerIcon2=L.divIcon({className:'',html:simSVG,iconSize:[36,36],iconAnchor:[18,18]});
-    if(userMarker){ userMarker.setLatLng([lat,lon]); userMarker.setIcon(walkerIcon2); } else if(mainMap){ userMarker=L.marker([lat,lon],{icon:walkerIcon2}).addTo(mainMap); }
-    if(mainMap) mainMap.setView([lat,lon],18);
-    checkProx(lat,lon); updateInfo(); updateNavOverlay(); updateMaps();
-  },900);
-}
-
 // ── INIT ─────────────────────────────────────────────────────────
 function iniciarRecorrido(){
   document.getElementById('welcomeScreen').style.display='none';
