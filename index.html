@@ -684,8 +684,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
   --go:#c9860a;--gol:#f0c040;
   --pa:#fdf8f0;--lav:#f3e9f7;--tx:#2d1a4a;
 }
-html,body{height:100%;background:var(--pud);overflow:hidden;font-family:system-ui,-apple-system,sans-serif;}
-#app{width:100%;max-width:420px;height:100vh;margin:0 auto;background:var(--pa);display:flex;flex-direction:column;overflow:hidden;position:relative;}
+html,body{height:100%;max-height:100%;background:var(--pud);overflow:hidden;font-family:system-ui,-apple-system,sans-serif;}
+#app{width:100%;max-width:420px;height:100dvh;margin:0 auto;background:var(--pa);display:flex;flex-direction:column;overflow:hidden;position:relative;}
 
 /* HEADER */
 .hdr{background:var(--pu);padding:10px 14px 0;flex-shrink:0;}
@@ -714,7 +714,7 @@ html,body{height:100%;background:var(--pud);overflow:hidden;font-family:system-u
 .bnav-btn.on{color:#fff;border-bottom:2px solid var(--gol);}
 
 /* STORY VIEW */
-#storyView{flex:1;display:none;flex-direction:column;overflow:hidden;}
+#storyView{flex:1;display:none;flex-direction:column;overflow:hidden;min-height:0;}
 .strip{display:flex;gap:5px;padding:6px 12px;overflow-x:auto;scrollbar-width:none;background:var(--lav);border-bottom:1px solid rgba(90,45,130,.15);flex-shrink:0;}
 .strip::-webkit-scrollbar{display:none;}
 .si{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;opacity:.3;transition:opacity .2s;}
@@ -759,7 +759,7 @@ html,body{height:100%;background:var(--pud);overflow:hidden;font-family:system-u
 .story-txt p{margin-bottom:7px;}
 .story-txt b{font-weight:700;}
 .story-txt i{font-style:italic;}
-.btm-bar{display:flex;gap:6px;padding:10px 12px;background:var(--lav);border-top:1px solid rgba(90,45,130,.15);flex-shrink:0;height:56px;}
+.btm-bar{display:flex;gap:6px;padding:10px 12px;background:var(--lav);border-top:1px solid rgba(90,45,130,.15);flex-shrink:0;}
 .v-btn{display:flex;align-items:center;justify-content:center;gap:5px;background:var(--pum);color:#fff;border:none;border-radius:8px;padding:12px 0;font-size:13px;font-weight:700;cursor:pointer;flex:1;text-transform:uppercase;}
 .v-btn.pl{background:var(--grd);}
 .vdot{width:6px;height:6px;border-radius:50%;background:#fff;animation:blink 1s infinite;}
@@ -783,6 +783,17 @@ html,body{height:100%;background:var(--pud);overflow:hidden;font-family:system-u
 .wlc-start{font-size:16px;display:inline-block;margin-top:8px;background:var(--go);color:#fff;font-weight:900;padding:8px 20px;border-radius:10px;letter-spacing:1px;}
 .wlc-btn{background:var(--gr);color:#fff;border:none;border-radius:12px;padding:18px 40px;font-size:18px;font-weight:900;letter-spacing:1px;text-transform:uppercase;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,.4);margin-top:8px;}
 </style>
+
+<script>
+function setVH() {
+  const vh = window.innerHeight;
+  const app = document.getElementById('app');
+  if (app) app.style.height = vh + 'px';
+}
+setVH();
+window.addEventListener('resize', setVH);
+window.addEventListener('orientationchange', function(){ setTimeout(setVH, 200); });
+</script>
 </head>
 <body>
 <div id="app">
