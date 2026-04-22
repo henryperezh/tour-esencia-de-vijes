@@ -1303,4 +1303,80 @@ function renderStrip() {
   const el = document.getElementById('strip');
   el.innerHTML = '';
   STOPS.forEach((s, i) => {
-    const div = document.createElement
+    const div = document.createElement('div');
+    div.className = 'si' + (i===cur?' on':'') + (visited.has(i)?' done':'');
+    div.innerHTML = `<div class="sn">${s.ico}</div><div class="sl">${s.label}</div>`;
+    div.onclick = () => { cur=i; stopVoice(); updateStoryContent(); showPhotos(i); switchView('story'); };
+    el.appendChild(div);
+  });
+}
+
+function updateStoryContent() {
+  const s = STOPS[cur];
+  document.getElementById('shSub').textContent = s.sub;
+  document.getElementById('shTitle').textContent = s.name;
+  const tags = document.getElementById('shTags');
+  tags.innerHTML = s.tags.map(t => `<span class="tag ${t.c}">${t.t}</span>`).join('');
+  // Texto con spans para resaltado de voz
+  document.getElementById('sTxt').innerHTML = s.segs.map((seg,i) =>
+    `<span id="seg-${i}">${seg} </span>`).join('');
+  document.querySelector('.scroll-body').scrollTop = 0;
+}
+
+function updateAll() {
+  renderStrip();
+  updateStoryContent();
+  updateInfo();
+  updateMaps();
+}
+
+function goNext() {
+  const next = cur + 1;
+  if (next < STOPS.length) {
+    visited.add(cur);
+    fotosDesbloqueadas.add(cur);
+    cur = next;
+    fotosDesbloqueadas.add(cur);
+    stopVoice();
+    if (userLine && mainMap) { mainMap.removeLayer(userLine); userLine = null; }
+    renderStrip();
+    updateStoryContent();
+    showPhotos(cur);
+    switchView('story');
+    updateProg();
+    updateInfo();
+    updateMaps();
+  } else {
+    finRec();
+  }
+}
+
+function finRec() {
+  stopVoice();
+  document.getElementById('finScreen').style.display = 'flex';
+}
+
+// ── INIT ─────────────────────────────────────────────────────────
+function iniciarTour() {
+  document.getElementById('welcomeScreen').style.display = 'none';
+  renderStrip();
+  updateStoryContent();
+  updateInfo();
+  startGPS();
+  switchView('map');
+  setTimeout(() => {
+    drawMap('mapCanvas');
+    setTimeout(() => { if(mainMap) mainMap.invalidateSize(); }, 400);
+  }, 300);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  window.addEventListener('resize', () => {
+    if (mainMap) mainMap.invalidateSize();
+    if (miniMap) miniMap.invalidateSize();
+  });
+});
+
+</script>
+</body>
+</html>
